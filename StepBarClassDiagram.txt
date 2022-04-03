@@ -1,0 +1,68 @@
+@startuml
+class StepBar <<component>> {
+  + isFormFilling
+  + isEdbEditing
+  + isEdbApproval
+  + isEditing
+  + isSigning
+  + isApprovalStep
+  + hasBackButton
+  + hasEditButton
+  + hasExitEditButton
+  + hasSubmitEditButton
+  + hasApproveButton
+  + hasReturnButton
+  --props--
+  # onBack
+  # onClear
+  # onNext
+  # onSubmit: function
+  # disableSave: Boolean
+  # finalSubmitStep: Boolean
+  # requiredLogin: Boolean
+  --state--
+  ~ exitEditPopup
+  ~ savePopup
+  ~ saveSuccessPopup
+  ~ saveFailPopup
+  ~ open
+  ~ openSubmittedDialog
+  ~ form017OpenSubmittedDialog
+  ~ openApprovalDialog
+  ~ openLogin
+  ~ action
+  ~ subFilPopop
+  ~ multiSubmitPopup
+  --method--
+  - handleSaveConfirm()
+  - handleNextAction()
+  - onSign()
+  - onSaveConfirm()
+  - onFormSubmit()
+  - onFormEdit()
+  - onFormApproval()
+  - onSign()
+  - onDownload()
+}
+
+class SigningDialog <<component>> {
+--props--
+# formOpen: open
+# uploadFirst: !isApplicantSigning
+# onSign: onSign()
+
+}
+
+class SignButton <<Button>> {
+--props--
+# onClick: setOpen(true)
+}
+
+StepBar o-- SignButton :isSigning
+SignButton o-- SigningDialog 
+
+StepBar o-- Component2
+StepBar o-- Component3
+StepBar o-- Component4
+
+@enduml
