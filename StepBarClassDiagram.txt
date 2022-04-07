@@ -1,4 +1,6 @@
 @startuml
+left to right direction
+
 class StepBar <<component>> {
   + isFormFilling
   + isEdbEditing
@@ -45,24 +47,49 @@ class StepBar <<component>> {
   - onDownload()
 }
 
+
+
+' === Button ===
+class PreviewPDF <<Button>> {}
+class CancelEdit <<Button>> {}
+class Back <<Button>> {}
+class Save <<Button>> {}
+class Next <<Button>> {}
+class Edit <<Button>> {}
+class Reply <<Button>> {}
+class Reject <<Button>> {}
+class Approval <<Button>> {}
+class SignButton <<Button>> {
+--props--
+# onClick: setOpen(true)
+}
+class Receive <<Button>> {}
+
+
+' === Dialog ===
 class SigningDialog <<component>> {
 --props--
 # formOpen: open
 # uploadFirst: !isApplicantSigning
 # onSign: onSign()
-
 }
 
-class SignButton <<Button>> {
---props--
-# onClick: setOpen(true)
-}
 
+' === Button display logic ===
+StepBar o-- PreviewPDF 
+StepBar o-- CancelEdit 
+StepBar o-- Back
+StepBar o-- Save
+StepBar o-- Next
+StepBar o-- Edit
+StepBar o-- Reply
+StepBar o-- Reject
+StepBar o-- Approval
 StepBar o-- SignButton :isSigning
-SignButton o-- SigningDialog 
+StepBar o-- Receive
 
-StepBar o-- Component2
-StepBar o-- Component3
-StepBar o-- Component4
+
+' === Dialog display logic ===
+SignButton o-- SigningDialog 
 
 @enduml
