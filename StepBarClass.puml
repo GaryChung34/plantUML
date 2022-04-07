@@ -1,4 +1,5 @@
 @startuml
+!theme blueprint
 left to right direction
 
 class StepBar <<component>> {
@@ -53,11 +54,24 @@ class StepBar <<component>> {
 
 
 ' === Button ===
-class PreviewPDF <<Button>> {}
-class CancelEdit <<Button>> {}
-class Back <<Button>> {}
-class Save <<Button>> {}
+class PreviewPDF <<Button>> {
+    --props--
+    # onClick: onDownload() /\nsubFileDownload()
+}
+class CancelEdit <<Button>> {
+    --props--
+    # onClick: setExitPopup(true)
+}
+class Back <<Button>> {
+    --props--
+    # onClick: onBack(), scrollToTop()
+}
+class Save <<Button>> {
+    --props--
+    # onClick: setSavePopup(true)
+}
 class Next <<Button>> {}
+class Submig <<Button>> {}
 class Edit <<Button>> {}
 class Reply <<Button>> {}
 class Reject <<Button>> {}
@@ -71,28 +85,41 @@ class Receive <<Button>> {}
 
 ' === Dialog ===
 class SigningDialog <<component>> {
---props--
-# formOpen: open
-# uploadFirst: !isApplicantSigning
-# onSign: onSign()
+    --props--
+    # formOpen: open
+    # uploadFirst: !isApplicantSigning
+    # onSign: onSign()
+}
+class ExitEdit <<AlertDialog>> {
+    --props--
+    # closeButton: handleExitClose()
+    # confirmButton: handleExitConfirm()
+}
+class SaveDialog <<AlertDialog>> {
+    --props--
+    # closeButton: handleSaveClose()
+    # confirmButton: handleSaveConfirm()
 }
 
 
 ' === Button display logic ===
-StepBar o-- PreviewPDF 
-StepBar o-- CancelEdit 
-StepBar o-- Back
-StepBar o-- Save
-StepBar o-- Next
-StepBar o-- Edit
-StepBar o-- Reply
-StepBar o-- Reject
-StepBar o-- Approval
-StepBar o-- SignButton :isSigning
-StepBar o-- Receive
+StepBar o-- PreviewPDF :isApprovalStep
+StepBar o-- CancelEdit :hasExitEditButton
+StepBar o-- Back :hasBackButton
+StepBar o-- Save :disableSave &&\nisFormFilling &&\nisEmpty(initialStep)
+StepBar o-- Next :isFunction(onNext) &&\nisFunction(handleSubmit) &&\nisFunction(onError)
+StepBar o-- Submit :finalSubmitStep &&\nisFormFilling &&\n!isApprovalStep
+StepBar o-- Edit :hasEditButton &&\nisNotEmpty(initialStep)
+StepBar o-- Reply :hasReturnButton
+StepBar o-- Reject :hasReturnButton
+StepBar o-- Approval :isEdbApproval
+StepBar o-- SignButton :isSigning :isSigning
+StepBar o-- Receive :hasApproveButton ||\nhasSubmitEditButton
 
 
 ' === Dialog display logic ===
 SignButton o-- SigningDialog 
+CancelEdit o-- ExitEdit :exitPopup
+Save o-- SaveDialog :savePopup
 
 @enduml
