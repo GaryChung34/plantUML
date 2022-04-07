@@ -1,0 +1,98 @@
+@startuml
+left to right direction
+
+class StepBar <<component>> {
+  + isFormFilling
+  + isEdbEditing
+  + isEdbApproval
+  + isEditing
+  + isSigning
+  + isApprovalStep
+  + hasBackButton
+  + hasEditButton
+  + hasExitEditButton
+  + hasSubmitEditButton
+  + hasApproveButton
+  + hasReturnButton
+  '
+  --props--
+  # onBack
+  # onClear
+  # onNext
+  # onSubmit: function
+  # disableSave: Boolean
+  # finalSubmitStep: Boolean
+  # requiredLogin: Boolean
+  '
+  --state--
+  ~ exitEditPopup
+  ~ savePopup
+  ~ saveSuccessPopup
+  ~ saveFailPopup
+  ~ open
+  ~ openSubmittedDialog
+  ~ form017OpenSubmittedDialog
+  ~ openApprovalDialog
+  ~ openLogin
+  ~ action
+  ~ subFilPopop
+  ~ multiSubmitPopup
+  '
+  --method--
+  - handleSaveConfirm()
+  - handleNextAction()
+  - onSign()
+  - onSaveConfirm()
+  - onFormSubmit()
+  - onFormEdit()
+  - onFormApproval()
+  - onSign()
+  - onDownload()
+}
+
+
+
+' === Button ===
+class PreviewPDF <<Button>> {}
+class CancelEdit <<Button>> {}
+class Back <<Button>> {}
+class Save <<Button>> {}
+class Next <<Button>> {}
+class Edit <<Button>> {}
+class Reply <<Button>> {}
+class Reject <<Button>> {}
+class Approval <<Button>> {}
+class SignButton <<Button>> {
+--props--
+# onClick: setOpen(true)
+}
+class Receive <<Button>> {}
+
+
+' === Dialog ===
+class SigningDialog <<component>> {
+--props--
+# formOpen: open
+# uploadFirst: !isApplicantSigning
+# onSign: onSign()
+}
+
+
+' === Button display logic ===
+StepBar o-- PreviewPDF 
+StepBar o-- CancelEdit 
+StepBar o-- Back
+StepBar o-- Save
+StepBar o-- Next
+StepBar o-- Edit
+StepBar o-- Reply
+StepBar o-- Reject
+StepBar o-- Approval
+StepBar o-- SignButton :isSigning
+StepBar o-- Receive
+
+
+' === Dialog display logic ===
+SignButton o-- SigningDialog 
+
+@enduml
