@@ -1,5 +1,5 @@
 @startuml
-!theme blueprint
+' !theme blueprint
 left to right direction
 
 class StepBar <<component>> {
@@ -70,17 +70,38 @@ class Save <<Button>> {
     --props--
     # onClick: setSavePopup(true)
 }
-class Next <<Button>> {}
-class Submig <<Button>> {}
-class Edit <<Button>> {}
-class Reply <<Button>> {}
-class Reject <<Button>> {}
-class Approval <<Button>> {}
-class SignButton <<Button>> {
---props--
-# onClick: setOpen(true)
+class Next <<Button>> {
+    --props--
+    # onClick: handleSubmit(handleNextAction, handleErrorAction)
 }
-class Receive <<Button>> {}
+class Submit <<Button>> {
+    --props--
+    # onClick: setOpen(true) /\nonFormSubmit()
+}
+class Edit <<Button>> {
+    --props--
+    # onClick: \ndispatch(setCurrentStep(initialStep))
+}
+class Reply <<Button>> {
+    --props--
+    # onClick: \nsetAction("return")\nsetOpenApprovalDialog(true)
+}
+class Reject <<Button>> {
+    --props--
+    # onClick: \nsetAction("reject")\nsetOpenApprovalDialog(true)
+}
+class Approval <<Button>> {
+    --props--
+    #onClick: onFormApproval({ act: "review" })
+}
+class Sign <<Button>> {
+    --props--
+    # onClick: setOpen(true)
+}
+class submitEdited <<Button>> {
+    --props--
+    # onClick: setMultiSubmitPopup(true)
+}
 
 
 ' === Dialog ===
@@ -100,7 +121,17 @@ class SaveDialog <<AlertDialog>> {
     # closeButton: handleSaveClose()
     # confirmButton: handleSaveConfirm()
 }
-
+class ApprovalDialog <<component>> {
+    --props--
+    # formOpen: openApprovalDialog
+    # onSubmit: onFormApproval()
+}
+class MultiSubmitDialog <<AlertDialog>> {
+    --props--
+    # formOpen: multiSubmitPopup
+    # closeButton: handleMultiSubmitClose()
+    # confirmButton: redirectToFormA()
+}
 
 ' === Button display logic ===
 StepBar o-- PreviewPDF :isApprovalStep
@@ -113,13 +144,18 @@ StepBar o-- Edit :hasEditButton &&\nisNotEmpty(initialStep)
 StepBar o-- Reply :hasReturnButton
 StepBar o-- Reject :hasReturnButton
 StepBar o-- Approval :isEdbApproval
-StepBar o-- SignButton :isSigning :isSigning
-StepBar o-- Receive :hasApproveButton ||\nhasSubmitEditButton
+StepBar o-- Sign :isSigning 
+StepBar o-- submitEdited :hasApproveButton ||\nhasSubmitEditButton
 
 
 ' === Dialog display logic ===
-SignButton o-- SigningDialog 
+Sign o-- SigningDialog :open
 CancelEdit o-- ExitEdit :exitPopup
 Save o-- SaveDialog :savePopup
+Submit o-- SigningDialog :open
+Reply o-- ApprovalDialog 
+Reject o-- ApprovalDialog 
+submitEdited o-- MultiSubmitDialog :multiSubmitPopup
+
 
 @enduml
