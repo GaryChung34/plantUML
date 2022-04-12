@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+
+' main class
+class LoginDialog <<component>> {
+    --props--
+    --methods--
+}
+
+
+@enduml
