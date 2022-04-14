@@ -7,5 +7,14 @@ class LoginDialog <<component>> {
     --methods--
 }
 
+class LoginSSLODialog <<component>> {
+    --props--
+    --methods--
+}
+
+class LoginPublicDialog <<component>> {
+    --props--
+    --methods--
+}
 
 @enduml
