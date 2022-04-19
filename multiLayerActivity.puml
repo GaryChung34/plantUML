@@ -1,0 +1,15 @@
+@startuml
+
+(*) --> "confirm"
+--> [submit] "form A"
+--> [next] "confirm\n(with form A data)"
+--> [submit edit] "sign mode"
+--> (*)
+
+"confirm\n(with form A data)" --> [submit] "form A"
+"confirm\n(with form A data)" --> [cancel edit] "confirm\n(with form A data)"
+"confirm\n(with form A data)" --> [back] "Application Info"
+"Application Info" --> [next] "confirm\n(with form A data)"
+
+
+@enduml
